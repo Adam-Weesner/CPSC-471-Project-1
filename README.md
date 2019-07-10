@@ -4,7 +4,7 @@
 2. Melissa
 3. Josh
 
-## Lanuage
+## Language
 Python
 
 ## How To Execute Program
