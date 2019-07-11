@@ -2,7 +2,7 @@
 ## Group Members
 1. Adam Weesner - aweesner@csu.fullerton.edu
 2. Melissa
-3. Josh
+3. Joshua Ferrara - joshferrara@csu.fullerton.edu
 
 ## Language
 Python
