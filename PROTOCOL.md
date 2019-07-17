@@ -82,7 +82,7 @@ Example for listing contents of `joshsfiles/` with server opening ephemeral port
 
 ```
 CLIENT:
- SoM  CMD     j    o    s    h    s    f    i    l    e    s    /  NUL
+ SoM  CMD    j    o    s    h    s    f    i    l    e    s    /  NUL
 0x42 0x04 0x6a 0x6f 0x73 0x68 0x73 0x66 0x69 0x6c 0x65 0x73 0x2f 0x00
 
 SERVER:
