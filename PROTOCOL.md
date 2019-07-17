@@ -64,7 +64,7 @@ Example for retrieving `helloworld.txt` with server opening ephemeral port at 27
 
 ```
 CLIENT:
-SoM  CMD    h    e    l    l    o    w    o    r    l    d    .    t    x    t  NUL
+ SoM  CMD    h    e    l    l    o    w    o    r    l    d    .    t    x    t  NUL
 0x42 0x03 0x68 0x65 0x6c 0x6c 0x6f 0x77 0x6f 0x72 0x6c 0x64 0x2e 0x74 0x78 0x74 0x00
 
 SERVER:
