@@ -15,10 +15,10 @@
 
 |Sent from|Command Code|Command Name|Command Alias|
 |---|---|---|---|
-|Server|0x04|[Data port opened](#0x01-data-port-opened)|N/A|
-|Client|0x01|[Get](#0x02-get-file-get-path)|`get <path>`|
-|Client|0x02|[Put](#0x03-put-file-put-path)|`put <path>`|
-|Client|0x03|[List](#0x04-list-ls-path)|`ls [path]`|
+|Server|0x01|[Data port opened](#0x01-data-port-opened)|N/A|
+|Client|0x02|[Get](#0x02-get-file-get-path)|`get <path>`|
+|Client|0x03|[Put](#0x03-put-file-put-path)|`put <path>`|
+|Client|0x04|[List](#0x04-list-ls-path)|`ls [path]`|
 
 ### Server-to-client
 
