@@ -40,7 +40,7 @@ SERVER:
 
 Gets a file from the server and sends it to the client.
 
-After receiving this command, the server should open an ephemeral port and send the port number to the client with command `0x04`.
+After receiving this command, the server should open an ephemeral port and send the port number to the client with command `0x01`.
 
 Example for retrieving `helloworld.txt` with server opening ephemeral port at 27000 + 0x32
 
@@ -58,7 +58,7 @@ SERVER:
 
 Puts a file from to server from the client.
 
-After receiving this command, the server should open an ephemeral port and send the port number to the client with command `0x04`.
+After receiving this command, the server should open an ephemeral port and send the port number to the client with command `0x01`.
 
 Example for retrieving `helloworld.txt` with server opening ephemeral port at 27000 + 0x88
 
@@ -76,7 +76,7 @@ SERVER:
 
 Lists files in a directory, if given. Otherwise, list files at the servers 'root' directory (TBD; this could be a configuration variable, or we could just assume the root directory to be where `server.py` is executing; might be insecure).
 
-After receiving this command, the server should open an ephemeral port and send the port number to the client with command `0x04`.
+After receiving this command, the server should open an ephemeral port and send the port number to the client with command `0x01`.
 
 Example for listing contents of `joshsfiles/` with server opening ephemeral port at 27000 + 0xFF
 
