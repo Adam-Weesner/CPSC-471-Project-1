@@ -2,7 +2,7 @@
 
 ## Basic message format
 
-`0x42 0xCMD [0xDATA] 0x00`
+`0x42 0xCMD [0xDATA...0xDATA-N] 0x00`
 
 * `0x42` denotes start of message (SoM)
 * Minimum message size is 3 bytes (if no data is included)
