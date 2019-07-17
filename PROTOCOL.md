@@ -11,6 +11,8 @@
 
 ## Commands
 
+A swimlane sequence diagram can be found and edited here: https://swimlanes.io/d/UhF7Bk5NL
+
 ### Quick Reference
 
 |Sent from|Command Code|Command Name|Command Alias|
