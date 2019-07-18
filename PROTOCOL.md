@@ -26,14 +26,14 @@ A swimlane sequence diagram can be found and edited here: https://swimlanes.io/d
 
 #### `0x02` Data port opened
 
-Sent to client when server has opened an ephemeral port. Contains one byte of data, indicating offset of port number from `27000`.
+Sent to client when server has opened an ephemeral port. Contains two bytes of data indicating the port which was opened.
 
-Example: server opens port 27023
+Example: server opens port 32768 = 0x80 0x00
 
 ```
 SERVER:
- SoM  CMD PORT  NUL
-0x01 0x02 0x17 0x00
+ SoM  CMD PORTH PORTL  NUL
+0x01 0x02  0x80  0x00 0x00
 ```
 
 ### Client-to-server
@@ -44,7 +44,7 @@ Gets a file from the server and sends it to the client.
 
 After receiving this command, the server should open an ephemeral port and send the port number to the client with command `0x02`.
 
-Example for retrieving `helloworld.txt` with server opening ephemeral port at 27000 + 0x32
+Example for retrieving `helloworld.txt` with server opening ephemeral port at 32768
 
 ```
 CLIENT:
@@ -52,8 +52,8 @@ CLIENT:
 0x01 0x03 0x68 0x65 0x6c 0x6c 0x6f 0x77 0x6f 0x72 0x6c 0x64 0x2e 0x74 0x78 0x74 0x00
  
 SERVER:
- SoM  CMD PORT  NUL
-0x01 0x02 0x32 0x00
+ SoM  CMD PORTH PORTL  NUL
+0x01 0x02  0x80  0x00 0x00
 ```
 
 #### `0x04` Put file `put <path>`
@@ -62,7 +62,7 @@ Puts a file from to server from the client.
 
 After receiving this command, the server should open an ephemeral port and send the port number to the client with command `0x02`.
 
-Example for retrieving `helloworld.txt` with server opening ephemeral port at 27000 + 0x88
+Example for retrieving `helloworld.txt` with server opening ephemeral port at 32768
 
 ```
 CLIENT:
@@ -70,8 +70,8 @@ CLIENT:
 0x01 0x04 0x68 0x65 0x6c 0x6c 0x6f 0x77 0x6f 0x72 0x6c 0x64 0x2e 0x74 0x78 0x74 0x00
 
 SERVER:
- SoM  CMD PORT  NUL
-0x01 0x02 0x88 0x00
+ SoM  CMD PORTH PORTL  NUL
+0x01 0x02  0x80  0x00 0x00
 ```
 
 #### `0x05` List `ls [path]`
@@ -80,7 +80,7 @@ Lists files in a directory, if given. Otherwise, list files at the servers 'root
 
 After receiving this command, the server should open an ephemeral port and send the port number to the client with command `0x02`.
 
-Example for listing contents of `joshsfiles/` with server opening ephemeral port at 27000 + 0xFF
+Example for listing contents of `joshsfiles/` with server opening ephemeral port at 32768
 
 ```
 CLIENT:
@@ -88,6 +88,6 @@ CLIENT:
 0x01 0x05 0x6a 0x6f 0x73 0x68 0x73 0x66 0x69 0x6c 0x65 0x73 0x2f 0x00
 
 SERVER:
- SoM  CMD PORT  NUL
-0x01 0x02 0xFF 0x00
+ SoM  CMD PORTH PORTL  NUL
+0x01 0x02  0x80  0x00 0x00
 ```
