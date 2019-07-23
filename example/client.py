@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 from socket import *
+from helpers import sendCommand
 import sys
 import threading
+import os
 
 START = 0x01
 END = 0x00
@@ -18,7 +20,7 @@ def connectEpheremal(dataPort):
    return
 
 def cmdList(clientSocket):
-    clientSocket.send(b'\x01\x04\x00')
+    clientSocket.send(b'\x01\x05\x00')
     return
 
 def parseMessage(buffer):
@@ -50,19 +52,61 @@ def serverHandler(serverSocket, serverAddress):
                 buffer = []
                 return False
 
+def getPortNumber(data):
+    """
+    Given a 0x05 packet in the data argument
+    returns an integer with the port number
+    encoded via the 2 data bytes in the packet
+    """
+    return int.from_bytes(data[2:4], byteorder="big")
+
 def main():
-    clientPort = int(sys.argv[1])
+    clientHost = sys.argv[1]
+    clientPort = int(sys.argv[2])
+
     clientSocket = socket(AF_INET, SOCK_STREAM)
-    clientSocket.connect(('', clientPort))
-    print("made connection to ", clientPort)
-    clientSocket.send(b'\x01Greetings\x00')
+    clientSocket.connect((clientHost, clientPort))
+    print(f"made connection to {clientHost}:{clientPort}")
     
     while 1:
             #threading.Thread(target=serverHandler, args=(clientSocket, clientPort)).start()
-            argument = input("Please input a command >> ")
-            if argument == "ls":
+            argument = input("Please input a command >> ").split()
+            if argument[0] == "ls":
                 cmdList(clientSocket)
-            serverHandler(clientSocket, clientPort)
+                serverHandler(clientSocket, clientPort)
+            elif argument[0] == "put":
+                # Puts a file to the server
+                fileName = argument[1]
+
+                # Check that the file exists
+                if not os.path.exists(fileName):
+                    print(f"{fileName} does not exist. File must be in same directory as {__file__}")
+                    continue
+
+                # Send `put` command to server with fileName
+                sendCommand(clientSocket, 4, fileName)
+
+                # Get response from server
+                ephPortNumber = getPortNumber(clientSocket.recv(5))
+
+                print(f"Attempting to connect to socket at {clientHost}:{ephPortNumber}")
+
+                # Connect to ephemeral socket
+                ephSocket = socket(AF_INET, SOCK_STREAM)
+                ephSocket.connect((clientHost, ephPortNumber))
+
+                print(f"Connected, transferring {fileName}")
+
+                # Transfer file
+                with open(fileName, 'rb') as f:
+                    ephSocket.sendall(f.read())
+
+                # Close connection
+                ephSocket.close()
+
+                print("Done!")
+                
+
         
     
             
