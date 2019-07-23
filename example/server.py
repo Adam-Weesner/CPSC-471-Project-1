@@ -52,8 +52,12 @@ def parseMessage(buffer, clientSocket):
         print(f"Client wants to upload {fileName}")
 
         # Setup ephemeral port
-        conn = DataConnection(clientSocket, timeout=10)
-        conn.waitClient()
+        conn = DataConnection(clientSocket, timeout=3)
+        try:
+            conn.waitClient()
+        except:
+            print(f"Client didn't connect - aborting transfer.")
+            return
 
         print("Client connected, receiving file...")
         fileSize = 0
