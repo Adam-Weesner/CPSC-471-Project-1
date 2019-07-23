@@ -53,6 +53,11 @@ def serverHandler(serverSocket, serverAddress):
                 return False
 
 def getPortNumber(data):
+    """
+    Given a 0x05 packet in the data argument
+    returns an integer with the port number
+    encoded via the 2 data bytes in the packet
+    """
     return int.from_bytes(data[2:4], byteorder="big")
 
 def main():
@@ -73,6 +78,7 @@ def main():
                 # Puts a file to the server
                 fileName = argument[1]
 
+                # Check that the file exists
                 if not os.path.exists(fileName):
                     print(f"{fileName} does not exist. File must be in same directory as {__file__}")
                     continue
@@ -85,14 +91,17 @@ def main():
 
                 print(f"Attempting to connect to socket at {clientHost}:{ephPortNumber}")
 
+                # Connect to ephemeral socket
                 ephSocket = socket(AF_INET, SOCK_STREAM)
                 ephSocket.connect((clientHost, ephPortNumber))
 
                 print(f"Connected, transferring {fileName}")
 
+                # Transfer file
                 with open(fileName, 'rb') as f:
                     ephSocket.sendall(f.read())
 
+                # Close connection
                 ephSocket.close()
 
                 print("Done!")

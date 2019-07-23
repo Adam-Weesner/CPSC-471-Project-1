@@ -3,6 +3,9 @@ from helpers import sendCommand
 
 class DataConnection:
     def __init__(self, clientSocket, data=None, timeout=60):
+        """
+        Helper class for managing ephemeral ports.
+        """
         self.clientSocket = clientSocket
         self.timeout = timeout
         self.data = data
