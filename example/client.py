@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from socket import *
-from helpers import sendCommand
+from helpers import sendCommand, messageReader
 import sys
 import threading
 import os
@@ -72,8 +72,21 @@ def main():
             #threading.Thread(target=serverHandler, args=(clientSocket, clientPort)).start()
             argument = input("Please input a command >> ").split()
             if argument[0] == "ls":
-                cmdList(clientSocket)
-                serverHandler(clientSocket, clientPort)
+                # Send `ls` command to server
+                sendCommand(clientSocket, 5)
+
+                # Get response from the server
+                ephPortNumber = getPortNumber(clientSocket.recv(5))
+
+                print(f"Attempting to connect to socket at {clientHost}:{ephPortNumber}")
+
+                # Connecting to ephemeral port
+                ephSocket = socket(AF_INET, SOCK_STREAM)
+                ephSocket.connect((clientHost, ephPortNumber))
+
+                # Printing out `ls` content
+                messageReader(ephSocket)
+
             elif argument[0] == "put":
                 # Puts a file to the server
                 fileName = argument[1]
