@@ -28,7 +28,7 @@ class DataConnection:
         # TODO: start a thread that waits for a client
         pass
 
-    def waitData(self):
+    def waitClient(self):
         print(f"Waiting for client on {self.getPortNumber()}")
         sendCommand(self.clientSocket, 2, self.getPortNumber().to_bytes(2, byteorder="big"))
         (clientSocket, addr) = self.socket.accept()

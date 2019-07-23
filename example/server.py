@@ -4,6 +4,7 @@ from subprocess import PIPE
 import subprocess
 import sys
 import threading
+import os
 
 from dataConnection import DataConnection
 from helpers import sendCommand
@@ -52,17 +53,22 @@ def parseMessage(buffer, clientSocket):
 
         # Setup ephemeral port
         conn = DataConnection(clientSocket, timeout=10)
-        conn.waitData()
+        conn.waitClient()
 
-        with open(fileName, 'wb') as f:
+        print("Client connected, receiving file...")
+        fileSize = 0
+        with open(os.path.join('files', fileName), 'wb') as f:
             while True:
                 dataIn = conn.clientSocket.recv(1)
                 if dataIn:
+                    fileSize += 1
                     f.write(dataIn)                
                 else:
                     break
 
             f.close()
+
+        print(f"Received {fileSize} bytes from client")
 
 
 
@@ -80,7 +86,7 @@ def clientHandler(clientSocket, clientAddress):
             commandBuffer = [newByte]
         elif newByte == b"\x00":
             # Got end of message, parse it
-            parseMessage(commandBuffer, clientSocket)
+            threading.Thread(target=parseMessage, args=(commandBuffer, clientSocket)).start()
             commandBuffer = []
 
 def main():

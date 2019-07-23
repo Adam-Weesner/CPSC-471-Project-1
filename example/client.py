@@ -3,6 +3,7 @@ from socket import *
 from helpers import sendCommand
 import sys
 import threading
+import os
 
 START = 0x01
 END = 0x00
@@ -52,8 +53,6 @@ def serverHandler(serverSocket, serverAddress):
                 return False
 
 def getPortNumber(data):
-    print("port data")
-    print(data)
     return int.from_bytes(data[2:4], byteorder="big")
 
 def main():
@@ -74,6 +73,10 @@ def main():
                 # Puts a file to the server
                 fileName = argument[1]
 
+                if not os.path.exists(fileName):
+                    print(f"{fileName} does not exist. File must be in same directory as {__file__}")
+                    continue
+
                 # Send `put` command to server with fileName
                 sendCommand(clientSocket, 4, fileName)
 
@@ -84,8 +87,15 @@ def main():
 
                 ephSocket = socket(AF_INET, SOCK_STREAM)
                 ephSocket.connect((clientHost, ephPortNumber))
-                ephSocket.send(b"Hello world!")
+
+                print(f"Connected, transferring {fileName}")
+
+                with open(fileName, 'rb') as f:
+                    ephSocket.sendall(f.read())
+
                 ephSocket.close()
+
+                print("Done!")
                 
 
         
