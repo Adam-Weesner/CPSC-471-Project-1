@@ -3,6 +3,7 @@
 1. Adam Weesner - aweesner@csu.fullerton.edu
 2. Melissa
 3. Joshua Ferrara - joshferrara@csu.fullerton.edu
+4. Hector Medina - hecmed@csu.fullerton.edu
 
 ## Language
 Python

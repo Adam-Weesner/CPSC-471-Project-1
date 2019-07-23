@@ -11,30 +11,6 @@ from helpers import sendCommand
 
 START = 0x01 # 0b000001
 
-
-# we need to create the port to send to the client
-# create a new socket on the server
-# send that socket to the client
-# have client establish connection
-# then send over data
-def epheremal():
-    epheremalSocket = socket(AF_INET, SOCK_STREAM)
-    epheremalSocket.bind(('', 0))
-    return epheremalSocket.getsockname()[1]
-
-# Commands
-# get the epheremal port then sends it over to the client.
-def cmdList(clientSocket):
-    # universal_newlines=PIPE -- for newlines on output
-    port = epheremal()
-    print("epheremal port: ", port)
-    message = f'\x01\x02{port}\x00'
-    print("message, ", str.encode(message))
-    clientSocket.send(str.encode(message))
-    # result = subprocess.run(['ls', '-l'], stdout=PIPE, stderr=PIPE)
-    # print(result.stdout)
-
-
 def parseMessage(buffer, clientSocket):
     # Command format:
     #  0     n-bytes      n+1 
@@ -43,8 +19,15 @@ def parseMessage(buffer, clientSocket):
 
     print(buffer)
     if buffer[1] == b'\x05':
-        print("before cmd list")
-        cmdList(clientSocket)
+        conn = DataConnection(clientSocket, timeout=3)
+        try:
+            conn.waitClient()
+        except:
+            print(f"Client didn't connect - aborting transfer.")
+            return
+        conn.clientSocket.send(str.encode(f"\x01{subprocess.run(['ls', '-l'], stdout=PIPE, stderr=PIPE, universal_newlines=True).stdout}\x00"))
+        print(f"sent `ls` to client")
+
     elif buffer[1] == b'\x04':
         fileName = (b''.join(buffer[2:-1])).decode('utf-8')
         
