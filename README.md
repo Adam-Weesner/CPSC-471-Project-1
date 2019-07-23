@@ -20,8 +20,8 @@ ex: python3 example/server.py 12000
 #### Starting the Client
 
 ```
-python3 example/server.py <hostname> <port>
-ex: python3 example/server.py 127.0.0.1 12000
+python3 example/client.py <hostname> <port>
+ex: python3 example/client.py 127.0.0.1 12000
 ```
 
 #### Commands:
