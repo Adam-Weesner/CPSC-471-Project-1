@@ -20,14 +20,6 @@ class DataConnection:
     def getPortNumber(self):
         return self.socket.getsockname()[1]
 
-    def writeData(self):
-        """Waits until client connects and sends all
-        data to client, or times out if no connection
-        was made.
-        """
-        # TODO: start a thread that waits for a client
-        pass
-
     def waitClient(self):
         print(f"Waiting for client on {self.getPortNumber()}")
         sendCommand(self.clientSocket, 2, self.getPortNumber().to_bytes(2, byteorder="big"))
