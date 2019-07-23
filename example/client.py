@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from socket import *
+from helpers import sendCommand
 import sys
 import threading
 
@@ -50,19 +51,43 @@ def serverHandler(serverSocket, serverAddress):
                 buffer = []
                 return False
 
+def getPortNumber(data):
+    print("port data")
+    print(data)
+    return int.from_bytes(data[2:4], byteorder="big")
+
 def main():
-    clientPort = int(sys.argv[1])
+    clientHost = sys.argv[1]
+    clientPort = int(sys.argv[2])
+
     clientSocket = socket(AF_INET, SOCK_STREAM)
-    clientSocket.connect(('', clientPort))
-    print("made connection to ", clientPort)
-    clientSocket.send(b'\x01Greetings\x00')
+    clientSocket.connect((clientHost, clientPort))
+    print(f"made connection to {clientHost}:{clientPort}")
     
     while 1:
             #threading.Thread(target=serverHandler, args=(clientSocket, clientPort)).start()
-            argument = input("Please input a command >> ")
-            if argument == "ls":
+            argument = input("Please input a command >> ").split()
+            if argument[0] == "ls":
                 cmdList(clientSocket)
-            serverHandler(clientSocket, clientPort)
+                serverHandler(clientSocket, clientPort)
+            elif argument[0] == "put":
+                # Puts a file to the server
+                fileName = argument[1]
+
+                # Send `put` command to server with fileName
+                sendCommand(clientSocket, 4, fileName)
+
+                # Get response from server
+                ephPortNumber = getPortNumber(clientSocket.recv(5))
+
+                print(f"Attempting to connect to socket at {clientHost}:{ephPortNumber}")
+
+                ephSocket = socket(AF_INET, SOCK_STREAM)
+                ephSocket.connect((clientHost, ephPortNumber))
+                ephSocket.send(b"Hello world!")
+                ephSocket.close()
+                
+
         
     
             
