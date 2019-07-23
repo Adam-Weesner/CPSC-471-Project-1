@@ -20,7 +20,7 @@ def connectEpheremal(dataPort):
    return
 
 def cmdList(clientSocket):
-    clientSocket.send(b'\x01\x04\x00')
+    clientSocket.send(b'\x01\x05\x00')
     return
 
 def parseMessage(buffer):
