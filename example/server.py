@@ -59,22 +59,26 @@ def parseMessage(buffer, clientSocket):
 
     # Get command
     if buffer[1] == b'\x03':
+        fileName = (b''.join(buffer[2:-1])).decode('utf-8')
+
+        # TODO: Remove this
+        print(f"Client wants to get {fileName}")
+
+        # Setup ephemeral port
         conn = DataConnection(clientSocket, timeout=3)
         try:
             conn.waitClient()
         except:
             print(f"Client didn't connect - aborting transfer.")
             return
-        print(f"sent `get` success to client")
+
+        print("Client connected, transferring file...")
+        fileSize = 0
+
+        print(f"Transferred {fileSize} bytes to client")
 
     # Exit command
     if buffer[1] == b'\x02':
-        conn = DataConnection(clientSocket, timeout=3)
-        try:
-            conn.waitClient()
-        except:
-            print(f"Client didn't connect - aborting transfer.")
-            return
         print(f"Client is leaving")
 
 

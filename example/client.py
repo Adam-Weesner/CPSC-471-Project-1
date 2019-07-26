@@ -76,28 +76,34 @@ def main():
                 print("Done!")
 
             if argument[0] == "get":
+                # Puts a file to the server
+                fileName = argument[1]
+
                 # Send `get` command and filename to server
-                sendCommand(clientSocket, 3)
+                sendCommand(clientSocket, 3, fileName)
 
                 # Get response from the server
                 ephPortNumber = getPortNumber(clientSocket.recv(5))
 
                 print(f"Attempting to connect to socket at {clientHost}:{ephPortNumber}")
 
-                # Connecting to ephemeral port
+                # Connect to ephemeral socket
                 ephSocket = socket(AF_INET, SOCK_STREAM)
                 ephSocket.connect((clientHost, ephPortNumber))
+
+                print(f"Connected, transferring {fileName}")
+
+                # Transfer file
+
+                # Close connection
+                ephSocket.close()
+
+                print("Done!")
 
             if argument[0] == "exit":
                 # Send `ls` command to server
                 sendCommand(clientSocket, 2)
 
-                # Get response from the server
-                ephPortNumber = getPortNumber(clientSocket.recv(5))
-                
-                # Connecting to ephemeral port
-                ephSocket = socket(AF_INET, SOCK_STREAM)
-                ephSocket.connect((clientHost, ephPortNumber))
                 clientSocket.close()
 
                 print(f"Exiting...")
