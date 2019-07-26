@@ -23,7 +23,7 @@ def main():
     clientSocket = socket(AF_INET, SOCK_STREAM)
     clientSocket.connect((clientHost, clientPort))
     print(f"made connection to {clientHost}:{clientPort}")
-    
+
     while 1:
             #threading.Thread(target=serverHandler, args=(clientSocket, clientPort)).start()
             argument = input("Please input a command >> ").split()
@@ -74,11 +74,35 @@ def main():
                 ephSocket.close()
 
                 print("Done!")
-                
 
-        
-    
-            
+            if argument[0] == "get":
+                # Send `get` command and filename to server
+                sendCommand(clientSocket, 3)
+
+                # Get response from the server
+                ephPortNumber = getPortNumber(clientSocket.recv(5))
+
+                print(f"Attempting to connect to socket at {clientHost}:{ephPortNumber}")
+
+                # Connecting to ephemeral port
+                ephSocket = socket(AF_INET, SOCK_STREAM)
+                ephSocket.connect((clientHost, ephPortNumber))
+
+            if argument[0] == "exit":
+                # Send `ls` command to server
+                sendCommand(clientSocket, 2)
+
+                # Get response from the server
+                ephPortNumber = getPortNumber(clientSocket.recv(5))
+                
+                # Connecting to ephemeral port
+                ephSocket = socket(AF_INET, SOCK_STREAM)
+                ephSocket.connect((clientHost, ephPortNumber))
+                clientSocket.close()
+
+                print(f"Exiting...")
+                sys.exit(0)
+
 
 if __name__ == '__main__':
     main()
