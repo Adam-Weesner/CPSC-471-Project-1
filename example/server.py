@@ -72,10 +72,18 @@ def parseMessage(buffer, clientSocket):
             print(f"Client didn't connect - aborting transfer.")
             return
 
-        print("Client connected, transferring file...")
-        fileSize = 0
+        # Check that the file exists
+        if not os.path.exists(fileName):
+            print(f"{fileName} does not exist. File must be in same directory as {__file__}")
+            return
 
-        print(f"Transferred {fileSize} bytes to client")
+        print("Client connected, transferring file...")
+
+        # Transfer file
+        with open(fileName, 'rb') as f:
+            clientSocket.sendall(f.read())
+
+        print(f"Transferred {fileName} to client")
 
     # Exit command
     if buffer[1] == b'\x02':

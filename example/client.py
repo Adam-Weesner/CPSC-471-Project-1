@@ -76,29 +76,42 @@ def main():
                 print("Done!")
 
             if argument[0] == "get":
-                # Puts a file to the server
-                fileName = argument[1]
+                if len(argument) != 2:
+                    print(f"ERROR - Please write commands in the format of: 'get <fileName>'")
+                else:
+                    # Puts a file to the server
+                    fileName = argument[1]
 
-                # Send `get` command and filename to server
-                sendCommand(clientSocket, 3, fileName)
+                    # Send `get` command and filename to server
+                    sendCommand(clientSocket, 3, fileName)
 
-                # Get response from the server
-                ephPortNumber = getPortNumber(clientSocket.recv(5))
+                    # Get response from the server
+                    ephPortNumber = getPortNumber(clientSocket.recv(5))
 
-                print(f"Attempting to connect to socket at {clientHost}:{ephPortNumber}")
+                    print(f"Attempting to connect to socket at {clientHost}:{ephPortNumber}")
 
-                # Connect to ephemeral socket
-                ephSocket = socket(AF_INET, SOCK_STREAM)
-                ephSocket.connect((clientHost, ephPortNumber))
+                    # Connect to ephemeral socket
+                    ephSocket = socket(AF_INET, SOCK_STREAM)
+                    ephSocket.connect((clientHost, ephPortNumber))
 
-                print(f"Connected, transferring {fileName}")
+                    print(f"Connected, transferring {fileName}")
 
-                # Transfer file
+                    # Transfer file
+                    fileSize = 0
+                    with open(os.path.join('files', fileName), 'wb') as f:
+                        while True:
+                            dataIn = ephSocket.recv(1)
+                            if dataIn:
+                                fileSize += 1
+                                f.write(dataIn)
+                            else:
+                                break
+                        f.close()
 
-                # Close connection
-                ephSocket.close()
+                    # Close connection
+                    ephSocket.close()
 
-                print("Done!")
+                    print("Done!")
 
             if argument[0] == "exit":
                 # Send `ls` command to server
