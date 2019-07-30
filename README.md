@@ -38,6 +38,17 @@ Please input a command >> ls
 Please input a command >> put <filename>
 ```
 
+##### get
+
+```
+Please input a command >> get <filename>
+```
+
+##### exit
+
+```
+Please input a command >> exit
+```
 
 ## Notes
 T

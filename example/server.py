@@ -13,7 +13,7 @@ START = 0x01 # 0b000001
 
 def parseMessage(buffer, clientSocket):
     # Command format:
-    #  0     n-bytes      n+1 
+    #  0     n-bytes      n+1
     # SoM   Data Length  EoM
     # 0x01 ...........  0x00
 
@@ -30,7 +30,7 @@ def parseMessage(buffer, clientSocket):
 
     elif buffer[1] == b'\x04':
         fileName = (b''.join(buffer[2:-1])).decode('utf-8')
-        
+
         # TODO: Remove this
         print(f"Client wants to upload {fileName}")
 
@@ -49,7 +49,7 @@ def parseMessage(buffer, clientSocket):
                 dataIn = conn.clientSocket.recv(1)
                 if dataIn:
                     fileSize += 1
-                    f.write(dataIn)                
+                    f.write(dataIn)
                 else:
                     break
 
@@ -57,7 +57,37 @@ def parseMessage(buffer, clientSocket):
 
         print(f"Received {fileSize} bytes from client")
 
+    # Get command
+    if buffer[1] == b'\x03':
+        fileName = (b''.join(buffer[2:-1])).decode('utf-8')
 
+        # TODO: Remove this
+        print(f"Client wants to get {fileName}")
+
+        # Setup ephemeral port
+        conn = DataConnection(clientSocket, timeout=3)
+        try:
+            conn.waitClient()
+        except:
+            print(f"Client didn't connect - aborting transfer.")
+            return
+
+        # Check that the file exists
+        if not os.path.exists(fileName):
+            print(f"{fileName} does not exist. File must be in same directory as {__file__}")
+            return
+
+        print("Client connected, transferring file...")
+
+        # Transfer file
+        with open(fileName, 'rb') as f:
+            clientSocket.sendall(f.read())
+
+        print(f"Transferred {fileName} to client")
+
+    # Exit command
+    if buffer[1] == b'\x02':
+        print(f"Client is leaving")
 
 
 def clientHandler(clientSocket, clientAddress):
@@ -86,7 +116,7 @@ def main():
     serverSocket.bind(('', serverPort))
     serverSocket.listen(5)
 
-    print(f"Server started on port {serverPort}") 
+    print(f"Server started on port {serverPort}")
 
     while 1:
         (clientSocket, addr) = serverSocket.accept()

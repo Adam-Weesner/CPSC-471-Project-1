@@ -23,7 +23,7 @@ def main():
     clientSocket = socket(AF_INET, SOCK_STREAM)
     clientSocket.connect((clientHost, clientPort))
     print(f"made connection to {clientHost}:{clientPort}")
-    
+
     while 1:
             #threading.Thread(target=serverHandler, args=(clientSocket, clientPort)).start()
             argument = input("Please input a command >> ").split()
@@ -74,11 +74,54 @@ def main():
                 ephSocket.close()
 
                 print("Done!")
-                
 
-        
-    
-            
+            if argument[0] == "get":
+                if len(argument) != 2:
+                    print(f"ERROR - Please write commands in the format of: 'get <fileName>'")
+                else:
+                    # Puts a file to the server
+                    fileName = argument[1]
+
+                    # Send `get` command and filename to server
+                    sendCommand(clientSocket, 3, fileName)
+
+                    # Get response from the server
+                    ephPortNumber = getPortNumber(clientSocket.recv(5))
+
+                    print(f"Attempting to connect to socket at {clientHost}:{ephPortNumber}")
+
+                    # Connect to ephemeral socket
+                    ephSocket = socket(AF_INET, SOCK_STREAM)
+                    ephSocket.connect((clientHost, ephPortNumber))
+
+                    print(f"Connected, transferring {fileName}")
+
+                    # Transfer file
+                    fileSize = 0
+                    with open(os.path.join('files', fileName), 'wb') as f:
+                        while True:
+                            dataIn = ephSocket.recv(1)
+                            if dataIn:
+                                fileSize += 1
+                                f.write(dataIn)
+                            else:
+                                break
+                        f.close()
+
+                    # Close connection
+                    ephSocket.close()
+
+                    print("Done!")
+
+            if argument[0] == "exit":
+                # Send `ls` command to server
+                sendCommand(clientSocket, 2)
+
+                clientSocket.close()
+
+                print(f"Exiting...")
+                sys.exit(0)
+
 
 if __name__ == '__main__':
     main()
