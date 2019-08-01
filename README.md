@@ -14,15 +14,15 @@
 #### Starting the Server
 
 ```
-python3 example/server.py <port>
-ex: python3 example/server.py 12000
+python3 ftp/server.py <port>
+ex: python3 ftp/server.py 12000
 ```
 
 #### Starting the Client
 
 ```
-python3 example/client.py <hostname> <port>
-ex: python3 example/client.py 127.0.0.1 12000
+python3 ftp/client.py <hostname> <port>
+ex: python3 ftp/client.py 127.0.0.1 12000
 ```
 
 #### Client commands:
