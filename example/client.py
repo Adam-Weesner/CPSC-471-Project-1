@@ -73,7 +73,7 @@ def main():
                 # Close connection
                 ephSocket.close()
 
-                print("Done!")
+                print(f"Done! Transferred {os.path.getsize(fileName)} bytes.")
 
             if argument[0] == "get":
                 if len(argument) != 2:
@@ -98,7 +98,7 @@ def main():
 
                     # Transfer file
                     fileSize = 0
-                    with open(os.path.join('files', fileName), 'wb') as f:
+                    with open(fileName, 'wb') as f:
                         while True:
                             dataIn = ephSocket.recv(1)
                             if dataIn:
@@ -111,7 +111,7 @@ def main():
                     # Close connection
                     ephSocket.close()
 
-                    print("Done!")
+                    print(f"Done! Transferred {fileSize} bytes")
 
             if argument[0] == "exit":
                 # Send `ls` command to server
