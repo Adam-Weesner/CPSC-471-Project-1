@@ -9,6 +9,10 @@
 
 **Python 3.6 or greater**
 
+## Protocol Design
+
+Please see [PROTOCOL.md](./PROTOCOL.md)
+
 ## How To Execute Program
 
 #### Starting the Server
