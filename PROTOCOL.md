@@ -20,6 +20,7 @@ The sequence diagram is also embedded at the bottom of this document.
 |Sent from|Command Code|Command Name|Command Alias|
 |---|---|---|---|
 |Server|0x02|[Data port opened](#0x02-data-port-opened)|N/A|
+|Client|0x02|Client Quitting|N/A|
 |Client|0x03|[Get](#0x03-get-file-get-path)|`get <path>`|
 |Client|0x04|[Put](#0x04-put-file-put-path)|`put <path>`|
 |Client|0x05|[List](#0x05-list-ls-path)|`ls [path]`|
