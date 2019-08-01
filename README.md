@@ -6,7 +6,8 @@
 4. Hector Medina - hecmed@csu.fullerton.edu
 
 ## Language
-Python
+
+**Python 3.6 or greater**
 
 ## How To Execute Program
 
@@ -24,7 +25,7 @@ python3 example/client.py <hostname> <port>
 ex: python3 example/client.py 127.0.0.1 12000
 ```
 
-#### Commands:
+#### Client commands:
 
 ##### ls
 
@@ -32,17 +33,23 @@ ex: python3 example/client.py 127.0.0.1 12000
 Please input a command >> ls
 ```
 
+Lists the files present in the `files` directory on the server.
+
 ##### put
 
 ```
 Please input a command >> put <filename>
 ```
 
+Sends a file from the client to the server. The file will be placed in the server's `files` directory.
+
 ##### get
 
 ```
 Please input a command >> get <filename>
 ```
+
+Gets a file from the server and downloads it to the client.
 
 ##### exit
 
@@ -51,4 +58,5 @@ Please input a command >> exit
 ```
 
 ## Notes
-T
+
+**Requires Python 3.6 or greater**
