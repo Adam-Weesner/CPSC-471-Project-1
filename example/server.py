@@ -25,13 +25,12 @@ def parseMessage(buffer, clientSocket):
         except:
             print(f"Client didn't connect - aborting transfer.")
             return
-        conn.clientSocket.send(str.encode(f"\x01{subprocess.run(['ls', '-l'], stdout=PIPE, stderr=PIPE, universal_newlines=True).stdout}\x00"))
+        conn.clientSocket.send(str.encode(f"\x01{subprocess.run(['ls', '-l', './files'], stdout=PIPE, stderr=PIPE, universal_newlines=True).stdout}\x00"))
         print(f"sent `ls` to client")
 
     elif buffer[1] == b'\x04':
         fileName = (b''.join(buffer[2:-1])).decode('utf-8')
 
-        # TODO: Remove this
         print(f"Client wants to upload {fileName}")
 
         # Setup ephemeral port
@@ -73,17 +72,17 @@ def parseMessage(buffer, clientSocket):
             return
 
         # Check that the file exists
-        if not os.path.exists(fileName):
+        if not os.path.exists(os.path.join('files', fileName)):
             print(f"{fileName} does not exist. File must be in same directory as {__file__}")
             return
 
         print("Client connected, transferring file...")
 
         # Transfer file
-        with open(fileName, 'rb') as f:
-            clientSocket.sendall(f.read())
+        with open(os.path.join('files', fileName), 'rb') as f:
+            conn.clientSocket.sendall(f.read())
 
-        print(f"Transferred {fileName} to client")
+        print(f"Transferred {fileName} to client - {os.path.getsize(os.path.join('files', fileName))} bytes")
 
     # Exit command
     if buffer[1] == b'\x02':
