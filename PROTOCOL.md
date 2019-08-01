@@ -13,6 +13,8 @@
 
 A swimlane sequence diagram can be found and edited here: https://swimlanes.io/d/UhF7Bk5NL
 
+The sequence diagram is also embedded at the bottom of this document.
+
 ### Quick Reference
 
 |Sent from|Command Code|Command Name|Command Alias|
@@ -91,3 +93,7 @@ SERVER:
  SoM  CMD PORTH PORTL  NUL
 0x01 0x02  0x80  0x00 0x00
 ```
+
+## Sequence Diagram
+
+![Sequence diagram](sequence.png)
