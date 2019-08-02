@@ -53,13 +53,15 @@ Sends a file from the client to the server. The file will be placed in the serve
 Please input a command >> get <filename>
 ```
 
-Gets a file from the server and downloads it to the client.
+Gets a file from the server's `files` directory and downloads it to the client.
 
 ##### exit
 
 ```
 Please input a command >> exit
 ```
+
+Provides a method for cleanly closing the control connection between the client and server.
 
 ## Notes
 

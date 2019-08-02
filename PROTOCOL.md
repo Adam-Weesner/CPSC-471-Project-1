@@ -1,13 +1,14 @@
 # Owl Theory Protocol Design
 
-## Basic message format
+## Message format
 
 `0x01 0xCMD [0xDATA...0xDATA-N] 0x00`
 
 * `0x01` denotes start of message (SoM)
-* Minimum message size is 3 bytes (if no data is included)
-* `0xCMD` indicates one-byte command code from table in the [quick reference](#quick-reference).
+* Minimum message size is 3 bytes (if no data is included); there is theoretically no maximum message size.
+* In the examples, `0xCMD` indicates one-byte command code from table in the [quick reference](#quick-reference).
 * **All messages are null-terminated to signify the end of the command.**
+* The client will typically expect a response from the server immediately after processing a command from the client.
 
 ## Commands
 
