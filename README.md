@@ -15,7 +15,7 @@ Please see [PROTOCOL.md](./PROTOCOL.md)
 
 ## How To Execute Program
 
-**Note:** `server.py` must be ran in the context of the `ftp` directory or a directory that contains a `files` directory. Uploads/downloads will be placed in the `files` directory.
+**Note:** `server.py` must be ran in the context of the `ftp` directory or a directory that contains a `files` directory. Uploads will be placed in the `files` directory.
 
 #### Starting the Server
 
