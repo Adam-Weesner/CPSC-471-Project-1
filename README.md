@@ -15,18 +15,20 @@ Please see [PROTOCOL.md](./PROTOCOL.md)
 
 ## How To Execute Program
 
+**Note:** `server.py` must be ran in the context of the `ftp` directory or a directory that contains a `files` directory. Uploads/downloads will be placed in the `files` directory.
+
 #### Starting the Server
 
 ```
-python3 ftp/server.py <port>
-ex: python3 ftp/server.py 12000
+cd ftp && python3 ./server.py <port>
+ex: cd ftp && python3 ./server.py 12000
 ```
 
 #### Starting the Client
 
 ```
-python3 ftp/client.py <hostname> <port>
-ex: python3 ftp/client.py 127.0.0.1 12000
+cd ftp && python3 ./client.py <hostname> <port>
+ex: cd ftp && python3 ./client.py 127.0.0.1 12000
 ```
 
 #### Client commands:
