@@ -57,7 +57,7 @@ def parseMessage(buffer, clientSocket):
         print(f"Received {fileSize} bytes from client")
 
     # Get command
-    if buffer[1] == b'\x03':
+    elif buffer[1] == b'\x03':
         fileName = (b''.join(buffer[2:-1])).decode('utf-8')
 
         # TODO: Remove this
@@ -85,8 +85,12 @@ def parseMessage(buffer, clientSocket):
         print(f"Transferred {fileName} to client - {os.path.getsize(os.path.join('files', fileName))} bytes")
 
     # Exit command
-    if buffer[1] == b'\x02':
+    elif buffer[1] == b'\x02':
         print(f"Client is leaving")
+
+    #Invalid buffer
+    else:
+        print(f"Invalid buffer -- error retrieving command from client")
 
 
 def clientHandler(clientSocket, clientAddress):

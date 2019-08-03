@@ -1,7 +1,7 @@
 # CPSC 471 - Assignment 1
 ## Group Members
 1. Adam Weesner - aweesner@csu.fullerton.edu
-2. Melissa Riddle
+2. Melissa Riddle - melissariddle@csu.fullerton.edu
 3. Joshua Ferrara - joshferrara@csu.fullerton.edu
 4. Hector Medina - hecmed@csu.fullerton.edu
 

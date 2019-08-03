@@ -75,7 +75,7 @@ def main():
 
                 print(f"Done! Transferred {os.path.getsize(fileName)} bytes.")
 
-            if argument[0] == "get":
+            elif argument[0] == "get":
                 if len(argument) != 2:
                     print(f"ERROR - Please write commands in the format of: 'get <fileName>'")
                 else:
@@ -113,7 +113,7 @@ def main():
 
                     print(f"Done! Transferred {fileSize} bytes")
 
-            if argument[0] == "exit":
+            elif argument[0] == "exit":
                 # Send `ls` command to server
                 sendCommand(clientSocket, 2)
 
@@ -121,6 +121,9 @@ def main():
 
                 print(f"Exiting...")
                 sys.exit(0)
+
+            else:
+                print(f"ERROR - not a valid command. Enter one of the following commands: ls, get, put, exit")
 
 
 if __name__ == '__main__':
