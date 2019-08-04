@@ -28,20 +28,23 @@ def main():
             #threading.Thread(target=serverHandler, args=(clientSocket, clientPort)).start()
             argument = input("Please input a command >> ").split()
             if argument[0] == "ls":
-                # Send `ls` command to server
-                sendCommand(clientSocket, 5)
+                if len(argument) != 1:
+                    print(f"ERROR - ls command does not accept additional arguments\n")
+                else:
+                    # Send `ls` command to server
+                    sendCommand(clientSocket, 5)
 
-                # Get response from the server
-                ephPortNumber = getPortNumber(clientSocket.recv(5))
+                    # Get response from the server
+                    ephPortNumber = getPortNumber(clientSocket.recv(5))
 
-                print(f"Attempting to connect to socket at {clientHost}:{ephPortNumber}")
+                    print(f"Attempting to connect to socket at {clientHost}:{ephPortNumber}")
 
-                # Connecting to ephemeral port
-                ephSocket = socket(AF_INET, SOCK_STREAM)
-                ephSocket.connect((clientHost, ephPortNumber))
+                    # Connecting to ephemeral port
+                    ephSocket = socket(AF_INET, SOCK_STREAM)
+                    ephSocket.connect((clientHost, ephPortNumber))
 
-                # Printing out `ls` content
-                messageReader(ephSocket)
+                    # Printing out `ls` content
+                    messageReader(ephSocket)
 
             elif argument[0] == "put":
                 # Puts a file to the server
