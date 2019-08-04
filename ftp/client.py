@@ -28,56 +28,62 @@ def main():
             #threading.Thread(target=serverHandler, args=(clientSocket, clientPort)).start()
             argument = input("Please input a command >> ").split()
             if argument[0] == "ls":
-                # Send `ls` command to server
-                sendCommand(clientSocket, 5)
+                if len(argument) != 1:
+                    print(f"ERROR - ls command does not accept additional arguments\n")
+                else:
+                    # Send `ls` command to server
+                    sendCommand(clientSocket, 5)
 
-                # Get response from the server
-                ephPortNumber = getPortNumber(clientSocket.recv(5))
+                    # Get response from the server
+                    ephPortNumber = getPortNumber(clientSocket.recv(5))
 
-                print(f"Attempting to connect to socket at {clientHost}:{ephPortNumber}")
+                    print(f"Attempting to connect to socket at {clientHost}:{ephPortNumber}")
 
-                # Connecting to ephemeral port
-                ephSocket = socket(AF_INET, SOCK_STREAM)
-                ephSocket.connect((clientHost, ephPortNumber))
+                    # Connecting to ephemeral port
+                    ephSocket = socket(AF_INET, SOCK_STREAM)
+                    ephSocket.connect((clientHost, ephPortNumber))
 
-                # Printing out `ls` content
-                messageReader(ephSocket)
+                    # Printing out `ls` content
+                    messageReader(ephSocket)
 
             elif argument[0] == "put":
-                # Puts a file to the server
-                fileName = argument[1]
-
-                # Check that the file exists
-                if not os.path.exists(fileName):
-                    print(f"{fileName} does not exist. File must be in same directory as {__file__}")
-                    continue
-
-                # Send `put` command to server with fileName
-                sendCommand(clientSocket, 4, fileName)
-
-                # Get response from server
-                ephPortNumber = getPortNumber(clientSocket.recv(5))
-
-                print(f"Attempting to connect to socket at {clientHost}:{ephPortNumber}")
-
-                # Connect to ephemeral socket
-                ephSocket = socket(AF_INET, SOCK_STREAM)
-                ephSocket.connect((clientHost, ephPortNumber))
-
-                print(f"Connected, transferring {fileName}")
-
-                # Transfer file
-                with open(fileName, 'rb') as f:
-                    ephSocket.sendall(f.read())
-
-                # Close connection
-                ephSocket.close()
-
-                print(f"Done! Transferred {os.path.getsize(fileName)} bytes.")
-
-            if argument[0] == "get":
                 if len(argument) != 2:
-                    print(f"ERROR - Please write commands in the format of: 'get <fileName>'")
+                    print(f"ERROR - Please write commands in the format of: 'put <fileName>'\n")
+                else:
+                    # Puts a file to the server
+                    fileName = argument[1]
+
+                    # Check that the file exists
+                    if not os.path.exists(fileName):
+                        print(f"{fileName} does not exist. File must be in same directory as {__file__}\n")
+                        continue
+
+                    # Send `put` command to server with fileName
+                    sendCommand(clientSocket, 4, fileName)
+
+                    # Get response from server
+                    ephPortNumber = getPortNumber(clientSocket.recv(5))
+
+                    print(f"Attempting to connect to socket at {clientHost}:{ephPortNumber}")
+
+                    # Connect to ephemeral socket
+                    ephSocket = socket(AF_INET, SOCK_STREAM)
+                    ephSocket.connect((clientHost, ephPortNumber))
+
+                    print(f"Connected, transferring {fileName}")
+
+                    # Transfer file
+                    with open(fileName, 'rb') as f:
+                        ephSocket.sendall(f.read())
+
+                    # Close connection
+                    ephSocket.close()
+
+                    print(f"Done! Transferred {os.path.getsize(fileName)} bytes\n")
+
+            elif argument[0] == "get":
+                if len(argument) != 2:
+                    print(f"ERROR - Please write commands in the format of: 'get <fileName>'\n")
                 else:
                     # Puts a file to the server
                     fileName = argument[1]
@@ -98,29 +104,45 @@ def main():
 
                     # Transfer file
                     fileSize = 0
-                    with open(fileName, 'wb') as f:
-                        while True:
-                            dataIn = ephSocket.recv(1)
-                            if dataIn:
-                                fileSize += 1
-                                f.write(dataIn)
-                            else:
-                                break
+                    isFile = True
+
+                    #check if empty file/file not found
+                    dataIn = ephSocket.recv(1)
+                    if dataIn == b"":
+                        print(f"No data returned. File does not exist at server\n")
+                    else: #transfer the file
+                        with open(fileName, 'wb') as f:
+                            fileSize += 1
+                            f.write(dataIn)
+                            while True:
+                                dataIn = ephSocket.recv(1)
+                                if dataIn:
+                                    fileSize += 1
+                                    f.write(dataIn)
+                                else:
+                                    break
                         f.close()
+                        print(f"Done! Transferred {fileSize} bytes\n")
+
 
                     # Close connection
                     ephSocket.close()
 
-                    print(f"Done! Transferred {fileSize} bytes")
+            elif argument[0] == "exit":
 
-            if argument[0] == "exit":
-                # Send `ls` command to server
-                sendCommand(clientSocket, 2)
+                if len(argument) != 1:
+                    print(f"ERROR - exit command does not accept additional arguments\n")
+                else:
+                    # Send `ls` command to server
+                    sendCommand(clientSocket, 2)
 
-                clientSocket.close()
+                    clientSocket.close()
 
-                print(f"Exiting...")
-                sys.exit(0)
+                    print(f"Exiting...")
+                    sys.exit(0)
+
+            else:
+                print(f"ERROR - not a valid command. Enter one of the following commands: ls, get, put, exit\n")
 
 
 if __name__ == '__main__':
