@@ -98,20 +98,29 @@ def main():
 
                     # Transfer file
                     fileSize = 0
-                    with open(fileName, 'wb') as f:
-                        while True:
-                            dataIn = ephSocket.recv(1)
-                            if dataIn:
-                                fileSize += 1
-                                f.write(dataIn)
-                            else:
-                                break
+                    isFile = True
+
+                    #check if empty file/file not found
+                    dataIn = ephSocket.recv(1)
+                    if dataIn == b"":
+                        print(f"No data returned. File does not exist at server.")
+                    else: #transfer the file
+                        with open(fileName, 'wb') as f:
+                            fileSize += 1
+                            f.write(dataIn)
+                            while True:
+                                dataIn = ephSocket.recv(1)
+                                if dataIn:
+                                    fileSize += 1
+                                    f.write(dataIn)
+                                else:
+                                    break
                         f.close()
+                        print(f"Done! Transferred {fileSize} bytes")
+
 
                     # Close connection
                     ephSocket.close()
-
-                    print(f"Done! Transferred {fileSize} bytes")
 
             elif argument[0] == "exit":
                 # Send `ls` command to server
